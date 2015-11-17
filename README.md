@@ -196,7 +196,7 @@ The unique `id` number of a `Song` instance should *come from the database*. Whe
 
 If that sounds confusing, check out this diagram:
 
-![](https://docs.google.com/drawings/d/1KYjce3m-ItD3j0hTuorBtlTgPoQSVg9v2sddGLVle8M/pub?w=958&h=497)
+![](http://readme-pics.s3.amazonaws.com/orm-diagram.pdf)
 
 Let's break it down:
 
