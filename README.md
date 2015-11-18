@@ -282,3 +282,62 @@ end
 ```
 
 Now we will never have to worry about accidentally updating the wrong record. 
+
+## Refactoring our `#save` Method to Avoid Duplication
+
+Our `#save` method currently looks like this:
+
+```ruby
+def save
+  sql = <<-SQL
+    INSERT INTO songs (name, album) 
+    VALUES (?, ?)
+  SQL
+
+  DB[:conn].execute(sql, self.name, self.album)
+    
+end
+```
+
+This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object has already been persisted? That already has an analogous database row?
+
+It would have the effect of creating a new database row with the same attributes as an existing row. The only difference would be the `id` number:
+
+```ruby
+hello = Song.new("Hello", "25")
+hello.save
+
+DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+# => [[1, "Hello", "25"]]
+
+# what happens when we save the same song all over again?
+
+hello.save
+
+DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+# => [[1, "Hello", "25"], [2, "Hello", "25"]]
+``` 
+
+Oh no! We have two records in our songs table that contain the same information. It is clear that our `#save` method needs some failsafes to protect against this kind of thing. 
+
+We need our `#save` method to check to see if the object it is being called on has already been persisted. If so, *don't `INSERT` a new row into the database*, simply *update* an existing one. Now that we have our handy `#update` method ready to go, this should be easy. 
+
+How to we know if an object has been persisted? If it has an `id` that is not `nil`. Remember that an object's `id` attribute gets set only once it has been `INSERT`ed into the database. 
+
+Let's take a look at our new `#save` method:
+
+```ruby
+def save
+  if self.id
+    self.update
+  else
+    sql = <<-SQL
+      INSERT INTO songs (name, album) 
+      VALUES (?, ?)
+    SQL
+    DB[:conn].execute(sql, self.name, self.album)
+  end 
+end
+```
+
+Great, now our `#save` method will never create duplicate records!
