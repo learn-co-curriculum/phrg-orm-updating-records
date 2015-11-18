@@ -2,9 +2,9 @@
 
 ## Objectives
 
-1. Learn how to write a method that will update existing database records once changes have been made to that record's equivalent Ruby object. 
-2. Learn how to identify whether a Ruby object has already been persisted to the database. 
-3. Learn how to build a method that can *either* find and update *or* create a database record. 
+1. Write a method that will update existing database records once changes have been made to that record's equivalent Ruby object. 
+2. Identify whether a Ruby object has already been persisted to the database. 
+3. Build a method that can *either* find and update *or* create a database record. 
 
 ## Updating Records
 It's hard to imagine a database that would stay totally static and never change. For example, a customer who uses your online market place updates their billing information or makes a new purchase. A user of your social networking site "friends" another user, creating a new association between them. A hospital updates the medical history of one of its patients. In any of these example of an app that uses a database, we need to be able to update, or change, the records that are stored in that database. 
