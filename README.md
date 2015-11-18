@@ -210,18 +210,20 @@ Now that we are all convinced that this is the behavior we want to implement, le
 
 ### Assigning Unique IDs on `#create`
 
-At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets saved into the database. At that point, the database record that it is equivalent to will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
+At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, the database record that it is equivalent to will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
 
-We already have a method that encapsulates creating a new object and saving it as a record in the database: `#create`. 
+When do we `INSERT` a new record into our database? In the `#save` method:
 
 ```ruby
-def self.create(name:, album:)
-  song = Song.new(name, album)
-  song.save
+def save
+  sql = <<-SQL
+    INSERT INTO songs (name, album) 
+    VALUES (?, ?)
+  SQL
+  DB[:conn].execute(sql, self.name, self.album)
 end
 ```
-
-Right after we call `#save` is an appropriate place to assign the newly created `song` object its unique `id` from the database. 
+Right after we `execute` the SQL `INSERT` statement  is an appropriate place to assign our `Song` object its unique `id` from the database. 
 
 How do we get the unique ID of the record we just created? We query the database table for the ID of the last inserted row:
 
@@ -238,14 +240,17 @@ DB[:conn].execute("SELECT last_insert_rowid() FROM students")
 
 Recall that whenever we execute SQL statements against our database using the SQLite3-Ruby gem's `#execute` method, we will get back an array of arrays. Here, we used the `last_insert_rowid()` SQL query to request one thing: the last inserted row's ID. Our SQLite3-Ruby gem obliged and gave us an array that contains one array that contains one element––the last inserted row ID. Phew!
 
-So, let's put it all together with our new-and-improved `#create` method:
+So, let's put it all together with our new-and-improved `#save` method:
 
 ```ruby
-def self.create(name:, album:)
-  song = Song.new(name, album)
-  song.save
+def save
+  sql = <<-SQL
+    INSERT INTO songs (name, album) 
+    VALUES (?, ?)
+  SQL
+  DB[:conn].execute(sql, self.name, self.album)
+end
   @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
-
 end
 ```
 
@@ -336,6 +341,7 @@ def save
       VALUES (?, ?)
     SQL
     DB[:conn].execute(sql, self.name, self.album)
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
   end 
 end
 ```
