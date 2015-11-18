@@ -208,7 +208,7 @@ What's so great about this? Well, with this pattern, every instance of the `Song
 
 Now that we are all convinced that this is the behavior we want to implement, let's build it. 
 
-### Assigning Unique IDs on `#create`
+### Assigning Unique IDs on `#save`
 
 At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, the database record that it is equivalent to will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
 
@@ -249,7 +249,6 @@ def save
     VALUES (?, ?)
   SQL
   DB[:conn].execute(sql, self.name, self.album)
-end
   @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
 end
 ```
@@ -300,7 +299,7 @@ def save
   SQL
 
   DB[:conn].execute(sql, self.name, self.album)
-    
+  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
 end
 ```
 
