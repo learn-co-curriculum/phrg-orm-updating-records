@@ -48,6 +48,7 @@ attr_reader :id
   def self.create(name:, album:)
     student = Student.new(name, album)
     student.save
+    student
   end
   
   def self.find_by_name(name)
