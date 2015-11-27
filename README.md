@@ -77,7 +77,7 @@ In order to update a record, we must first find it:
 ```ruby
 ninety_nine_problems = Song.find_by_name("99 Problems")
 
-ninety_nine_problesm.album
+ninety_nine_problems.album
 # => "The Blueprint"
 ```
 
