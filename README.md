@@ -124,7 +124,7 @@ sql = "UPDATE songs SET name='Hello' WHERE name = ?"
 DB[:conn].execute(sql, hello.name)
 ```
 
-This code is almost exactly the same as the code we used to update the album of the first song. The only differences are in the particular attribute we wanted to update. In the first case, we were updating the album. In this case, we were updated the name. Repetitious code has a smell. Let's extract this functionality of updating a record into an method, `#update`. 
+This code is almost exactly the same as the code we used to update the album of the first song. The only differences are in the particular attribute we wanted to update. In the first case, we were updating the album. In this case, we updated the name. Repetitious code has a smell. Let's extract this functionality of updating a record into an method, `#update`. 
 
 ### The `#update` Method
 
