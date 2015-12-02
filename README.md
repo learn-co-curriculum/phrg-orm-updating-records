@@ -347,3 +347,5 @@ end
 ```
 
 Great, now our `#save` method will never create duplicate records!
+
+<a href='https://learn.co/lessons/orm-updating-records' data-visibility='hidden'>View this lesson on Learn.co</a>
