@@ -327,7 +327,7 @@ Oh no! We have two records in our songs table that contain the same information.
 
 We need our `#save` method to check to see if the object it is being called on has already been persisted. If so, *don't `INSERT` a new row into the database*, simply *update* an existing one. Now that we have our handy `#update` method ready to go, this should be easy. 
 
-How to we know if an object has been persisted? If it has an `id` that is not `nil`. Remember that an object's `id` attribute gets set only once it has been `INSERT`ed into the database. 
+How do we know if an object has been persisted? If it has an `id` that is not `nil`. Remember that an object's `id` attribute gets set only once it has been `INSERT`ed into the database. 
 
 Let's take a look at our new `#save` method:
 
@@ -347,5 +347,3 @@ end
 ```
 
 Great, now our `#save` method will never create duplicate records!
-
-<a href='https://learn.co/lessons/orm-updating-records' data-visibility='hidden'>View this lesson on Learn.co</a>
