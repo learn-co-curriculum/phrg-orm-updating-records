@@ -143,7 +143,7 @@ DB[:conn].execute(sql, hello.album, hello.name)
 
 ```
 
-Here we update *both* the name and album attribute of the song, even though only the album attribute is actually different. 
+Here we update *both* the name and album attribute of the song, even though only the name attribute is actually different. 
 
 Okay, now that we've solved this problem, let's build our method:
 
@@ -347,5 +347,3 @@ end
 ```
 
 Great, now our `#save` method will never create duplicate records!
-
-<a href='https://learn.co/lessons/orm-updating-records' data-visibility='hidden'>View this lesson on Learn.co</a>
