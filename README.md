@@ -185,7 +185,7 @@ songs SET name = ?, album = ?
 WHERE name = ?
 ```
 
-We are identifying the record we want to update by matching the *name* attribute of the object to the name value of the table row. But, song names are not unique! The above call to `#update` would update the album name of *both songs with the name of `"Hello"`. Oh no!
+We are identifying the record we want to update by matching the *name* attribute of the object to the name value of the table row. But, song names are not unique! The above call to `#update` would update the album name of *both* songs with the name of `"Hello"`. Oh no!
 
 Looks like we need to find some unique way to identify song objects and match them with their equally unique equivalent song records...
 
