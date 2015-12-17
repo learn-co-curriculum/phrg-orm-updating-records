@@ -151,7 +151,7 @@ Okay, now that we've solved this problem, let's build our method:
 class Song
   ...
   
-  def udpate
+  def update
     sql = "UPDATE songs SET name = ?, album = ? WHERE name = ?"
     DB[:conn].execute(sql, self.name, self.album, self.name)
   end
@@ -347,3 +347,5 @@ end
 ```
 
 Great, now our `#save` method will never create duplicate records!
+
+<a href='https://learn.co/lessons/orm-updating-records' data-visibility='hidden'>View this lesson on Learn.co</a>
