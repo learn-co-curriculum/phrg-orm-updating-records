@@ -2,20 +2,20 @@
 
 ## Objectives
 
-1. Write a method that will update existing database records once changes have been made to that record's equivalent Ruby object. 
+1. Write a method that will update an existing database record once changes have been made to that record's equivalent Ruby object. 
 2. Identify whether a Ruby object has already been persisted to the database. 
 3. Build a method that can *either* find and update *or* create a database record. 
 
 ## Updating Records
-It's hard to imagine a database that would stay totally static and never change. For example, a customer who uses your online market place updates their billing information or makes a new purchase. A user of your social networking site "friends" another user, creating a new association between them. A hospital updates the medical history of one of its patients. In any of these example of an app that uses a database, we need to be able to update, or change, the records that are stored in that database. 
+It's hard to imagine a database that would stay totally static and never change. For example, a customer who uses your online market place updates their billing information or makes a new purchase. A user of your social networking site "friends" another user, creating a new association between them. A hospital updates the medical history of one of its patients. In each of these example apps that uses a database, we need to be able to update, or change, the records that are stored in that database. 
 
-What do we need to do in order to successfully update a record? We need to first find the appropriate record. Then, we make some changes to it and finally, save it once again. 
+What do we need to do in order to successfully update a record? First, we need to find the appropriate record. Then, we make some changes to it, and finally, save it once again. 
 
-In our Ruby ORM, in which attributes of a given Ruby objects are stored as an individual row in a database table, we will need to retrieve these attributes, reconstitute them into a Ruby object, make changes to that object using Ruby methods and *then* save those (newly updated) attributes back into the database. 
+In our Ruby ORM, where attributes of given Ruby objects are stored as an individual row in a database table, we will need to retrieve these attributes, reconstitute them into a Ruby object, make changes to that object using Ruby methods, and *then* save those (newly updated) attributes back into the database. 
 
 Let's walk through this process together. 
 
-## Updating Record in a Ruby ORM
+## Updating a Record in a Ruby ORM
 
 For the purposes of this example, we'll be working with a fictitious music management app that allows the user to store their songs. Our app has a `Song` class that maps to a songs database table. Our `Song` class has all the methods it needs to create the songs table, insert records into that table and retrieve records from that table. 
 
@@ -46,9 +46,9 @@ attr_reader :id
   end
 
   def self.create(name:, album:)
-    student = Student.new(name, album)
-    student.save
-    student
+    song = Song.new(name, album)
+    song.save
+    song
   end
   
   def self.find_by_name(name)
@@ -68,7 +68,7 @@ Song.find_by_name("99 Problems")
 # => #<Song:0x007f94f2c28ee8 @id=1, @name="99 Problems", @album="The Blueprint">
 ```
 
-Now that we see how to create a `Song` instance, save its attributes to the database, retrieve those attributes and use them to re-create a `Song` instance, let's move on to updating records and objects. 
+Now that we've seen how to create a `Song` instance, save its attributes to the database, retrieve those attributes and use them to re-create a `Song` instance, let's move on to updating records and objects. 
 
 ### Updating Songs
 
@@ -106,7 +106,7 @@ sql = "UPDATE songs SET album=#{ninety_nine_problems.album} WHERE name = ?"
 DB[:conn].execute(sql, ninety_nine_problems.name)
 ```
 
-Here we updated the album of a given song. What happens when we want to update some other attribute of a song?
+Here we've updated the album of a given song. What happens when we want to update some other attribute of a song?
 
 Let's take a look:
 
@@ -124,7 +124,7 @@ sql = "UPDATE songs SET name='Hello' WHERE name = ?"
 DB[:conn].execute(sql, hello.name)
 ```
 
-This code is almost exactly the same as the code we used to update the album of the first song. The only differences are in the particular attribute we wanted to update. In the first case, we were updating the album. In this case, we updated the name. Repetitious code has a smell. Let's extract this functionality of updating a record into an method, `#update`. 
+This code is almost exactly the same as the code we used to update the album of the first song. The only difference is in the particular attribute we wanted to update. In the first case, we were updating the album. In this case, we updated the name. Repetitious code has a smell. Let's extract this functionality of updating a record into an method, `#update`. 
 
 ### The `#update` Method
 
@@ -151,7 +151,7 @@ Okay, now that we've solved this problem, let's build our method:
 class Song
   ...
   
-  def udpate
+  def update
     sql = "UPDATE songs SET name = ?, album = ? WHERE name = ?"
     DB[:conn].execute(sql, self.name, self.album, self.name)
   end
@@ -168,7 +168,7 @@ hello.update
 
 ## Duplication and Object ID
 
-What happens when we create another song, also called `"Hello"`? After all, this is not *such* an uncommon song title. 
+What happens when we create another song also called `"Hello"`? After all, this is not *such* an uncommon song title. 
 
 ```ruby
 another_hello = Song.create(name: "Hello", album: "Hello!!")
@@ -211,7 +211,7 @@ Now that we are all convinced that this is the behavior we want to implement, le
 
 ### Assigning Unique IDs on `#save`
 
-At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, the database record that it is equivalent to will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
+At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, its equivalent database record will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
 
 When do we `INSERT` a new record into our database? In the `#save` method:
 
@@ -347,3 +347,5 @@ end
 ```
 
 Great, now our `#save` method will never create duplicate records!
+
+<a href='https://learn.co/lessons/orm-updating-records' data-visibility='hidden'>View this lesson on Learn.co</a>
