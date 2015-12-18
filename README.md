@@ -42,7 +42,7 @@ attr_reader :id
     SQL
 
     DB[:conn].execute(sql, self.name, self.album)
-    
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
   end
 
   def self.create(name:, album:)
@@ -90,7 +90,9 @@ ninety_nine_problems.album
 # => "The Black Album"
 ```
 
-Much better. Now we need to save this record back into the database. To do so, we'll need to use an `UPDATE` SQL statement. That statement would look something like this:
+Much better. Now we need to save this record back into the database:
+
+To do so, we'll need to use an `UPDATE` SQL statement. That statement would look something like this:
 
 ```sql
 UPDATE songs 
@@ -286,7 +288,7 @@ class Song
 end
 ```
 
-Now we will never have to worry about accidentally updating the wrong record. 
+Now we will never have to worry about accidentally updating the wrong record, or being unable to find a record once we change its name.  
 
 ## Refactoring our `#save` Method to Avoid Duplication
 
