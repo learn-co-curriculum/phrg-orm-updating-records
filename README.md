@@ -168,34 +168,25 @@ hello.name = "Hello"
 hello.update
 ```
 
-## Duplication and Object ID
+Wait a second, you might be wondering, how can the `#update` method use `WHERE name = #{self.name}"` if we *just changed the name of the song?* **Well...it can't!**
 
-What happens when we create another song also called `"Hello"`? After all, this is not *such* an uncommon song title. 
+The above `#update` method *will not work* if we are trying to update the name of a song. Think about it: If we change the name of `hello` to `"Hello"` with the following:
 
 ```ruby
-another_hello = Song.create(name: "Hello", album: "Hello!!")
-
-another_hello.album = "Hello"
-
-another_hello.update
-```
-Remember that the SQL statement inside our `#update` method looks like this:
-
-```sql
-UPDATE 
-songs SET name = ?, album = ? 
-WHERE name = ?
+hello.name = "Hello"
 ```
 
-We are identifying the record we want to update by matching the *name* attribute of the object to the name value of the table row. But, song names are not unique! The above call to `#update` would update the album name of *both* songs with the name of `"Hello"`. Oh no!
+Then the database table doesn't yet know that we changed the name. We haven't saved that change yet so the database row that stores `hello`'s information still has a value of `"Hella"` in the "name" column. 
 
-Looks like we need to find some unique way to identify song objects and match them with their equally unique equivalent song records...
+So using something changeable, like name, to identify the record we want to update, won't work. If only each individual database record and its analogous Ruby object had some kind of unique, un-changing identifier...
 
-Luckily for us, each song record in the songs table already has a unique value in the `id` column. That is the great thing about the primary key column––it is always unique. 
+That's where the primary key ID of a database record and the `id` attribute of its analogous Ruby object come in. 
 
-Song records in the database table have a unique `id`, and our `Song` instances have an `id` attribute, but that attribute gets set to `nil` when an individual song is initialized. We want our `Song` instances to get assigned a unique `id` number, but when? and how?
+## Identifying Objects and Records Using ID
 
-The unique `id` number of a `Song` instance should *come from the database*. When a song record gets inserted into the database, it automatically gets assigned a unique ID number. We need to grab that ID number *from the database record* and assign it to the `Song` instance's `id` attribute. 
+We need a way to select a Ruby object's analogous table row using some fixed and unique attribute.  Song records in the database table have a unique `id`, and our `Song` instances have an `id` attribute. Recall that we have been setting the `id` attribute of individual songs directly after the data regarding that song gets inserted into the database table, right at the end of our `#save` method. Why?
+
+The unique `id` number of a `Song` instance should *come from the database*. When a song record gets inserted into the database, that row automatically gets assigned a unique ID number. We need to grab that ID number *from the database record* and assign it to the `Song` instance's `id` attribute. 
 
 If that sounds confusing, check out this diagram:
 
@@ -209,7 +200,7 @@ Let's break it down:
 
 What's so great about this? Well, with this pattern, every instance of the `Song` class that is ever saved into the database will be assigned a unique `id` attribute that we can use to differentiate it from the other `Song` objects we created and that we can use to find, retrieve and update unique songs. 
 
-Now that we are all convinced that this is the behavior we want to implement, let's build it. 
+Now that we are all convinced that this is the behavior we want to implement, take a closer look at the code that implements it. 
 
 ### Assigning Unique IDs on `#save`
 
