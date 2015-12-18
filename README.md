@@ -103,9 +103,9 @@ WHERE name="99 Problems";
 Let's put it all together using our SQLite3-Ruby gem magic. Remember, in this example, we assume our database connection is stored in `DB[:conn]`. 
 
 ```ruby
-sql = "UPDATE songs SET album= ? WHERE name = ?"
+sql = "UPDATE songs SET album=#{ninety_nine_problems.album} WHERE name = ?"
 
-DB[:conn].execute(sql, ninety_nine_problems.album, ninety_nine_problems.name)
+DB[:conn].execute(sql, ninety_nine_problems.name)
 ```
 
 Here we've updated the album of a given song. What happens when we want to update some other attribute of a song?
@@ -170,13 +170,26 @@ hello.update
 
 Wait a second, you might be wondering, how can the `#update` method use `WHERE name = #{self.name}"` if we *just changed the name of the song?* **Well...it can't!**
 
-The above `#update` method *will not work* if we are trying to update the name of a song. Think about it: If we change the name of `hello` to `"Hello"` with the following:
+The above `#update` method *will not work* if we are trying to update the name of a song. Think about it: If we change the name of `hello` from `"Hella"` to `"Hello"` with the following:
 
 ```ruby
 hello.name = "Hello"
 ```
 
-Then the database table doesn't yet know that we changed the name. We haven't saved that change yet so the database row that stores `hello`'s information still has a value of `"Hella"` in the "name" column. 
+Then the database table doesn't yet know that we changed the name. We haven't saved that change yet so the database row that stores `hello`'s information still has a value of `"Hella"` in the "name" column. So, after the above line of code is executed, our SQL query:
+
+```ruby
+sql = "UPDATE songs SET name = ?, album = ? WHERE name = ?"
+DB[:conn].execute(sql, self.name, self.album, self.name)
+```
+
+Would be interpreted like this:
+
+```ruby
+DB[:conn].execute(sql, "Hello", "25", "Hello")
+```
+
+And, seeing as our database row still has a value of `"Hella"` in the "name" column, our query would fail to find the correct record and consequently fail to update it. 
 
 So using something changeable, like name, to identify the record we want to update, won't work. If only each individual database record and its analogous Ruby object had some kind of unique, un-changing identifier...
 
