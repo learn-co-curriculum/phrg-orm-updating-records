@@ -42,7 +42,7 @@ attr_reader :id
     SQL
 
     DB[:conn].execute(sql, self.name, self.album)
-    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM songs")[0][0]
   end
 
   def self.create(name:, album:)
@@ -241,7 +241,7 @@ SELECT last_insert_rowid() FROM students
 **Important:** When we execute the above SQL statement using our SQLite3-Ruby gem, we get back something that may feel unexpected:
 
 ```ruby
-DB[:conn].execute("SELECT last_insert_rowid() FROM students")
+DB[:conn].execute("SELECT last_insert_rowid() FROM songs")
 # => [[1]]
 ```
 
@@ -256,7 +256,7 @@ def save
     VALUES (?, ?)
   SQL
   DB[:conn].execute(sql, self.name, self.album)
-  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM songs")[0][0]
 end
 ```
 
@@ -306,7 +306,7 @@ def save
   SQL
 
   DB[:conn].execute(sql, self.name, self.album)
-  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM songs")[0][0]
 end
 ```
 
@@ -347,7 +347,7 @@ def save
       VALUES (?, ?)
     SQL
     DB[:conn].execute(sql, self.name, self.album)
-    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM songs")[0][0]
   end 
 end
 ```
