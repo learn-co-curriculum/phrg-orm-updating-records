@@ -285,7 +285,7 @@ Our `#update` method should identify the correct record to update based on the u
 class Song
   ...
   
-  def udpate
+  def update
     sql = "UPDATE songs SET name = ?, album = ? WHERE id = ?"
     DB[:conn].execute(sql, self.name, self.album, self.id)
   end
