@@ -235,7 +235,7 @@ Right after we `execute` the SQL `INSERT` statement  is an appropriate place to 
 How do we get the unique ID of the record we just created? We query the database table for the ID of the last inserted row:
 
 ```sql
-SELECT last_insert_rowid() FROM students
+SELECT last_insert_rowid() FROM songs
 ```
 
 **Important:** When we execute the above SQL statement using our SQLite3-Ruby gem, we get back something that may feel unexpected:
@@ -355,3 +355,5 @@ end
 Great, now our `#save` method will never create duplicate records!
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records' title='Updating Records in an ORM'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
+
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
