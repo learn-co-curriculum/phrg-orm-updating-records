@@ -217,7 +217,7 @@ Now that we are all convinced that this is the behavior we want to implement, ta
 
 ### Assigning Unique IDs on `#save`
 
-At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, its equivalent database record will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
+At what point in time should a `Song` instance get assigned a unique `id`? Right after we `INSERT` it into the database. At that point, its equivalent database record will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
 
 When do we `INSERT` a new record into our database? In the `#save` method:
 
@@ -310,7 +310,7 @@ def save
 end
 ```
 
-This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object has already been persisted? That already has an analogous database row?
+This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object that has already been persisted and has an analogous database row?
 
 It would have the effect of creating a new database row with the same attributes as an existing row. The only difference would be the `id` number:
 
@@ -355,5 +355,3 @@ end
 Great, now our `#save` method will never create duplicate records!
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records' title='Updating Records in an ORM'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
