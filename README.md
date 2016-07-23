@@ -318,14 +318,14 @@ It would have the effect of creating a new database row with the same attributes
 hello = Song.new("Hello", "25")
 hello.save
 
-DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+DB[:conn].execute("SELECT * FROM songs WHERE name = 'Hello' AND album = '25'")
 # => [[1, "Hello", "25"]]
 
-# what happens when we save the same song all over again?
+# What happens if we save the same song again?
 
 hello.save
 
-DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+DB[:conn].execute("SELECT * FROM songs WHERE name = 'Hello' AND album = '25'")
 # => [[1, "Hello", "25"], [2, "Hello", "25"]]
 ``` 
 
