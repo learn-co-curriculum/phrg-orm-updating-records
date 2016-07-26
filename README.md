@@ -310,7 +310,7 @@ def save
 end
 ```
 
-This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object has already been persisted? That already has an analogous database row?
+This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object that has already been persisted? That already has an analogous database row?
 
 It would have the effect of creating a new database row with the same attributes as an existing row. The only difference would be the `id` number:
 
@@ -357,3 +357,5 @@ Great, now our `#save` method will never create duplicate records!
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records' title='Updating Records in an ORM'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
