@@ -217,7 +217,7 @@ Now that we are all convinced that this is the behavior we want to implement, ta
 
 ### Assigning Unique IDs on `#save`
 
-At what point in time should a `Song` instance get assigned a unique `id`? Right after it gets `INSERT`ed into the database. At that point, its equivalent database record will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
+At what point in time should a `Song` instance get assigned a unique `id`? Right after we `INSERT` it into the database. At that point, its equivalent database record will have a unique ID in the ID column. We want to simply grab that ID and use it to assign the `Song` object its `id` value. 
 
 When do we `INSERT` a new record into our database? In the `#save` method:
 
@@ -310,7 +310,8 @@ def save
 end
 ```
 
-This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object that has already been persisted? That already has an analogous database row?
+
+This method will *always `INSERT` a new row into the database table*. But, what happens if we accidentally call `#save` on an object that has already been persisted and has an analogous database row?
 
 It would have the effect of creating a new database row with the same attributes as an existing row. The only difference would be the `id` number:
 
@@ -318,22 +319,22 @@ It would have the effect of creating a new database row with the same attributes
 hello = Song.new("Hello", "25")
 hello.save
 
-DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+DB[:conn].execute("SELECT * FROM songs WHERE name = 'Hello' AND album = '25'")
 # => [[1, "Hello", "25"]]
 
-# what happens when we save the same song all over again?
+# What happens if we save the same song again?
 
 hello.save
 
-DB[:conn].execute("SELECT * FROM songs WHERE name = "Hello" AND album = "25")
+DB[:conn].execute("SELECT * FROM songs WHERE name = 'Hello' AND album = '25'")
 # => [[1, "Hello", "25"], [2, "Hello", "25"]]
 ``` 
 
-Oh no! We have two records in our songs table that contain the same information. It is clear that our `#save` method needs some failsafes to protect against this kind of thing. 
+Oh no! We have two records in our songs table that contain the same information. It is clear that our `#save` method needs some fail-safes to protect against this kind of thing.
 
-We need our `#save` method to check to see if the object it is being called on has already been persisted. If so, *don't `INSERT` a new row into the database*, simply *update* an existing one. Now that we have our handy `#update` method ready to go, this should be easy. 
+We need our `#save` method to check to see if the object it is being called on has already been persisted. If so, *don't `INSERT` a new row into the database*, simply *update* an existing one. Now that we have our handy `#update` method ready to go, this should be easy.
 
-How do we know if an object has been persisted? If it has an `id` that is not `nil`. Remember that an object's `id` attribute gets set only once it has been `INSERT`ed into the database. 
+How do we know if an object has been persisted? If it has an `id` that is not `nil`. Remember that an object's `id` attribute gets set only once it has been `INSERT`ed into the database.
 
 Let's take a look at our new `#save` method:
 
@@ -356,6 +357,3 @@ Great, now our `#save` method will never create duplicate records!
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records' title='Updating Records in an ORM'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
 
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
-
-<p class='util--hide'>View <a href='https://learn.co/lessons/orm-updating-records'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
