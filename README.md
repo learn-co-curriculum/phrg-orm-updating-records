@@ -355,5 +355,4 @@ end
 
 Great, now our `#save` method will never create duplicate records!
 
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/orm-updating-records' title='Updating Records in an ORM'>Updating Records in an ORM</a> on Learn.co and start learning to code for free.</p>
-
+<p data-visibility='hidden'>PHRG Updating Records in an ORM</p>
