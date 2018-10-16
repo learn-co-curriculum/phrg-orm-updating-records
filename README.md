@@ -355,4 +355,7 @@ end
 
 Great, now our `#save` method will never create duplicate records!
 
+## Does this need an update?
+Please open a [GitHub issue](https://github.com/learn-co-curriculum/phrg-orm-updating-records/issues) or [pull-request](https://github.com/learn-co-curriculum/phrg-orm-updating-records/pulls). Provide a detailed description that explains the issue you have found or the change you are proposing. Then "@" mention your instructor on the issue or pull-request, and send them a link via Connect.
+
 <p data-visibility='hidden'>PHRG Updating Records in an ORM</p>
